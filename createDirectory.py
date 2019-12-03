@@ -68,13 +68,13 @@ def whichBrand(brandName):
 def sel():
     """Select which medium this project is for."""
     if(mediaVar.get() == "Digital"):
-        digi_Menu.config(state = ACTIVE)
+        digi_Menu.config(state = ACTIVE, bg='#3498DB', fg='#FFFFFF')
     else:
-        digi_Menu.config(state = DISABLED)
+        digi_Menu.config(state = DISABLED, bg="#999999")
     if(mediaVar.get() == "Print"):
-        print_Menu.config(state = ACTIVE)
+        print_Menu.config(state = ACTIVE, bg='#3498DB', fg='#FFFFFF')
     else:
-        print_Menu.config(state = DISABLED)
+        print_Menu.config(state = DISABLED, bg="#999999")
 
 # Change the Franchise Label text for readability
 def franDescChange(*args):
@@ -158,10 +158,9 @@ def processLabel(label_name):
         split_arr = label_name.split(" ")
         capitalized = [x.capitalize() for x in split_arr]
         processed = "".join(capitalized).replace(" ", "")
-        return processed
     else:
         processed = label_name
-        return processed
+    return processed
 
 def get_media(media):
     """Return the media variable value."""
@@ -175,8 +174,8 @@ def get_media(media):
 def close_win():
     mainWin.destroy()
 
-mainWin_w = 535
-mainWin_h = 305
+mainWin_w = 575
+mainWin_h = 295
 # Create UI Window
 mainWin = Tk()
 mainWin.title("Create New Directory")
@@ -189,10 +188,10 @@ vn_LabelText = "Version:"
 mn_LabelText = "Month:"
 
 # Store string variables here
-sn_TextVar = StringVar() # Spot Name
-fn_TextVar = StringVar() # Franchise Name
-vn_TextVar = StringVar() # Version Number
-mn_TextVar = StringVar() # Month Number
+sn_TextVar = StringVar(mainWin) # Spot Name
+fn_TextVar = StringVar(mainWin) # Franchise Name
+vn_TextVar = StringVar(mainWin) # Version Number
+mn_TextVar = StringVar(mainWin) # Month Number
 
 # Default values for String variables
 vn_TextVar.set("001") # Version default : 001
@@ -203,46 +202,55 @@ sn_TextVar.set("NewSpotNameHere") # Spot name default: "NewSpotNameHere"
 # Padding for the entry fields widgets
 padding_Y = 3
 padding_X = 15
+btn_pady = 10
+
 # Font styling
 font_size = 12
 font_family = 'Oswald'
 font_weight = 'bold'
 
 # Find Franchise Brand Name
-fn_BrandLabel = Label(mainWin, text=fn_LabelText, font=(font_family, font_size, font_weight)).grid(row=0, column=0, pady=padding_Y)
+fn_BrandLabel = Label(mainWin, text=fn_LabelText,
+                     font=(font_family, font_size, font_weight)).grid(row=0, column=0, pady=padding_Y, sticky="e")
 fn_NameEntry = OptionMenu(mainWin, fn_TextVar, *OPTIONS, command=franDescChange)
-fn_NameEntry.grid(row=0, column=1, pady=padding_Y, padx=5)
+fn_NameEntry.grid(row=0, column=1, pady=padding_Y, sticky="w")
+fn_NameEntry.config(bg='#3498DB', fg='#FFFFFF',
+                    activebackground='#6DB9EC', activeforeground='#5C5C5C', width=25)
 
 # Franchise name destination label
 fn_Desc = Listbox(mainWin)
-fn_Desc.grid(row = 0, column=2, pady=padding_Y, rowspan=1, columnspan=2, sticky=(W))
+fn_Desc.grid(row = 0, column=2, pady=padding_Y, rowspan=2, columnspan=2, sticky="w")
 # resize Franchise name label to the 4 - size to keep consistency
 fn_size_dif = (4 - fn_Desc.size())
 fn_Desc.config(height=fn_Desc.size() + fn_size_dif, )
 franDescChange()
 
 # Create Spot Name Entry
-sn_EntryLabel = Label(mainWin, text=sn_LabelText, font=(font_family, font_size, font_weight)).grid(row=1, column=0, pady=padding_Y)
+sn_EntryLabel = Label(mainWin, text=sn_LabelText,
+                     font=(font_family, font_size, font_weight)).grid(row=1, column=0, pady=padding_Y, sticky="e")
 sn_NameEntry = Entry(mainWin, textvariable=sn_TextVar, bd=5)
-sn_NameEntry.grid(row=1, column=1, pady=padding_Y)
+sn_NameEntry.grid(row=1, column=1, pady=padding_Y, padx=5, sticky="w")
 # Create Month Number Entry
-mn_EntryLabel = Label(mainWin, text=mn_LabelText, font=(font_family, font_size, font_weight)).grid(row=2, column=0, pady=padding_Y)
+mn_EntryLabel = Label(mainWin, text=mn_LabelText,
+                     font=(font_family, font_size, font_weight)).grid(row=2, column=0, pady=padding_Y, sticky="e")
 mn_NameEntry = Entry(mainWin, textvariable=mn_TextVar, bd=5)
-mn_NameEntry.grid(row=2, column=1, pady=padding_Y)
+mn_NameEntry.grid(row=2, column=1, pady=padding_Y, padx=5, sticky="w")
 # Create Version Number Entry
-vn_EntryLabel = Label(mainWin, text=vn_LabelText, font=(font_family, font_size, font_weight)).grid(row=3, column=0, pady=padding_Y)
+vn_EntryLabel = Label(mainWin, text=vn_LabelText,
+                     font=(font_family, font_size, font_weight)).grid(row=3, column=0, pady=padding_Y, sticky="e")
 vn_NameEntry = Entry(mainWin, textvariable=vn_TextVar, bd=5)
-vn_NameEntry.grid(row=3, column=1, pady=padding_Y)
+vn_NameEntry.grid(row=3, column=1, pady=padding_Y, padx=5, sticky="w")
 
 # What is this media intended for?  Broadcast, Digital, Print
-medLabel = Label(mainWin, text="Create project for: ",  font=(font_family, font_size, font_weight)).grid(row=4, column=0, pady=padding_Y)
-mediaVar = StringVar() # Variable to store the value
+medLabel = Label(mainWin, text="Create project for: ",
+                font=(font_family, font_size, font_weight)).grid(row=4, column=0, pady=padding_Y, sticky="e")
+mediaVar = StringVar(mainWin) # Variable to store the value
 med_val1 = Radiobutton(mainWin, text="Broadcast", variable=mediaVar, value="Broadcast", command=sel)
-med_val1.grid(row=4, column=1, sticky=(W))
+med_val1.grid(row=4, column=1, sticky="w")
 med_val2 = Radiobutton(mainWin, text="Digital", variable=mediaVar, value="Digital", command=sel)
-med_val2.grid(row=5, column=1, sticky=(W))
+med_val2.grid(row=5, column=1, sticky="w")
 med_val3 = Radiobutton(mainWin, text="Print", variable=mediaVar, value="Print", command=sel)
-med_val3.grid(row=6, column=1, sticky=(W))
+med_val3.grid(row=6, column=1, sticky="w")
 
 # Dynamically populate the Digital dropdown list
 digi_folder = "R:\\Digital\\"
@@ -265,13 +273,17 @@ for printItem in print_optionsToAppend:
         print_options.append(printItem)
 
 # Create drop down menu for the Digital parent folder
-digi_Var = StringVar() # Variable to store the dropdown value
+digi_Var = StringVar(mainWin) # Variable to store the dropdown value
 digi_Menu = OptionMenu(mainWin, digi_Var, *digi_options)
-digi_Menu.grid(row=5, column=2, columnspan=2, sticky=(W))
+digi_Menu.grid(row=5, column=1, columnspan=2, sticky="w", padx=padding_X*6)
+digi_Menu.config(width=35, background="#999999",
+                activebackground='#6DB9EC', activeforeground='#5C5C5C')
 # Create drop down menu for the Print parent folder
-print_Var = StringVar() # Variable to store the dropdown value
+print_Var = StringVar(mainWin) # Variable to store the dropdown value
 print_Menu = OptionMenu(mainWin, print_Var, *print_options)
-print_Menu.grid(row=6, column=2, columnspan=2, sticky=(W))
+print_Menu.grid(row=6, column=1, columnspan=2, sticky="w", padx=padding_X*6)
+print_Menu.config(width=35, background="#999999",
+                    activebackground='#6DB9EC', activeforeground='#5C5C5C')
 
 # Set default button pressed for mediaVar and disable the drop downs
 med_val1.select()
@@ -282,22 +294,25 @@ print_Menu.config(state=DISABLED)
 
 # Add separator for organization
 sep = ttk.Separator(mainWin, orient="horizontal")
-sep.grid(row=7, column=0, columnspan=4, padx=padding_X, pady=padding_Y, sticky="we")
+sep.grid(row=7, column=0, columnspan=4, padx=padding_X, pady=btn_pady, sticky="we")
 
 # Open Projects Directory Location
 dirBtn = Button(mainWin, text="Open Projects",
                 command=lambda: openFileLoc(mediaVar.get(), get_media(mediaVar.get())))
-dirBtn.config(bg='#A393B3', fg='#FFFFFF', width=16)
-dirBtn.grid(row=8, column=0, padx=padding_X, sticky=(E))
+dirBtn.config(bg='#A393B3', fg='#FFFFFF', width=16,
+                activebackground='#B8A7CA', activeforeground='#5C5C5C')
+dirBtn.grid(row=8, column=0, padx=padding_X, sticky="e")
 
 # Create Directory Button
 createBtn = Button(mainWin, text="Create Directory", command=createDir)
-createBtn.config(bg='#3498DB', fg='#FFFFFF', width=16) # change colors to blue with white text
-createBtn.grid(row=8, column=1, padx=padding_X) # place on the bottom of the window
+createBtn.config(bg='#3498DB', fg='#FFFFFF', width=16,
+                activebackground='#6DB9EC', activeforeground='#5C5C5C') # change colors to blue with white text
+createBtn.grid(row=8, column=1, sticky="w") # place on the bottom of the window
 
 # Close Window Button
 closeBtn = Button(mainWin, text="Close", command=close_win)
-closeBtn.config(bg='#C0392B', fg='#FFFFFF', width=16) # change colors to red with white text
-closeBtn.grid(row=8, column=2, padx=padding_X, sticky=(E)) # place on the bottom of the window
+closeBtn.config(bg='#C0392B', fg='#FFFFFF', width=16,
+                activebackground='#E55647', activeforeground='#5C5C5C') # change colors to red with white text
+closeBtn.grid(row=8, column=2, padx=padding_X, sticky="e") # place on the bottom of the window
 
 mainWin.mainloop()
