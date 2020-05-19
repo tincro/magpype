@@ -11,7 +11,7 @@ from tkinter import ttk
 
 # Location of where to put the Directory
 home = os.getcwd()
-desktop = home + '\\Desktop\\' # Will output to Desktop
+desktop = os.path.join(home,"Desktop","")
 
 # What month is it? Return as padded decimal Number
 d = date.today()
@@ -30,23 +30,25 @@ OPTIONS = [
 "Genesis",
 "Westside Auto Mall",
 "Ray_Buy Here Pay Here",
-"Ray_Skillman_All_Brands"
+"Ray_Skillman_All_Brands",
+"Tent_Sale"
 ]
 
 # Dictionary to populate folders
 BRANDS = {
     "Ford": ["RS2F", "RSHF", "RSF", "RSFU"],
     "Chevy": ["RSC"],
-    "Hyundai": ["RS3H", "RSWH", "RSHA"],
+    "Hyundai": ["RS3H", "RSH", "RSWH", "RSHA"],
     "Kia": ["RS3K", "RSK", "RSWK", "RSSK"],
     "Mitsubishi": ["RS3M", "RSM", "RSWMI"],
-    "Buick_GMC": ["RS2BG", "RSNEBG"],
+    "Buick_GMC": ["RS2BG", "RSNEBG","RS2G","RS2B"],
     "Mazda": ["RS2MA", "RSWMA", "RSNEMA"],
-    "New Whiteland": ["RSFNW"],
-    "Genesis": ["RSGEN"],
-    "Westside Auto Mall": ["RSWAM"],
+    "New Whiteland": ["RSFNW", "RSKNW", "RSBNW", "RSMNW"],
+    "Genesis": ["RSG"],
+    "Westside Auto Mall": ["RSWAM", "RSWT"],
     "Ray_Buy Here Pay Here": ["RSBHPH"],
-    "Ray_Skillman_All_Brands": ["RSAB"]
+    "Ray_Skillman_All_Brands": ["RSAB", "RSBF"],
+    "Tent_Sale": ["TS"]
 }
 
 defaultDir = "R:\\Broadcast"
@@ -79,8 +81,6 @@ def sel():
 # Change the Franchise Label text for readability
 def franDescChange(*args):
     """Callback for changing the Franchise name options to the destination folder."""
-    # fn_DescText = "Folder: " + fn_TextVar.get()
-    # fn_Desc.config(text = fn_DescText)
     fn_Desc.delete(0, END)
     for item in whichBrand(fn_TextVar.get()):
         fn_Desc.insert(END, item)
@@ -92,47 +92,55 @@ def createDir(*args):
     Copies and renames a template project for media files with same name."""
     # Decide which type of Media the directory belongs to
     medName = mediaVar.get()
-    if(medName == "Digital"): # isDigital
+    if(medName == "Digital"):
+        # if media is Digital
         parName = digi_Var.get()
-    elif(medName == "Print"): # isPrint
+    elif(medName == "Print"):
+        # if media is Print
         parName = print_Var.get()
     else:
-        parName = fn_TextVar.get() #  Get franchise name
+        #  Get franchise name. Broadcast is default
+        parName = fn_TextVar.get()
 
-    # Grab the directory parent Location
-    toRen = "R:\\{}\\{}".format(medName, parName) # Change to where you want the folders to go
-    # Grab the directory name
-    franch_Name = fn_Desc.get(ACTIVE) # Franchise variable
-    spot_Name = processLabel(sn_NameEntry.get()) # Spot name variable
-    version_Name = vn_NameEntry.get() # version number
-    month_Name = mn_NameEntry.get() # month number
+    # Grab the directory parent Location  EX. ..\Broadcast\Ford\
+    toRen = "R:\\{}\\{}".format(medName, parName)
+    # Grab the ISCI code for the spot
+    franch_Name = fn_Desc.get(ACTIVE)
+    # Television Spot name variable from user input
+    spot_Name = processLabel(sn_NameEntry.get())
+    # version number from user input
+    version_Name = vn_NameEntry.get()
+    # get month number from user input
+    month_Name = mn_NameEntry.get()
 
-    campaign_name = curYear + "-" + spot_Name # EX. _19-MyCampaignName_
+    # EX. .._19-MyCampaignName_..
+    campaign_name = curYear + "-" + spot_Name
 
+    # directory name EX: RS2F_12_TruckMonth_v001
     dirName = franch_Name + "_" + month_Name + "_" + campaign_name + "_" + "v" + version_Name
 
     # Path to copy
-    aePath = 'S:\\Templates\\Files\\Ae'
-    prePath = 'S:\\Templates\\Files\\Pre'
+    aePath = os.path.join('S:','Templates','Files','Ae')
+    prePath = os.path.join('S:','Templates','Files','Pre')
     # Files to copy
     aeFileTemp = 'Code_CampaignNumber_CampaignName_Version_001.aep'
     preFileTemp = 'Code_CampaignNumber_CampaignName_Version_001.prproj'
 
-    aeFile = aePath + '\\' + aeFileTemp
-    preFile = prePath + '\\' + preFileTemp
+    aeFile = os.path.join(aePath,aeFileTemp)
+    preFile = os.path.join(prePath, preFileTemp)
 
-    # Create File Directory
-    aeDir = "{}\\{}\\Files\\AE".format(toRen, dirName)
-    preDir = "{}\\{}\\Files\\PR".format(toRen, dirName)
-    gsDir = "{}\\{}\\GS".format(toRen, dirName)
-    imgDir = "{}\\{}\\Images".format(toRen, dirName)
-    audioDir = "{}\\{}\\Audio".format(toRen, dirName)
-    radioDir = "{}\\{}\\Radio".format(toRen, dirName)
-    bRollDir = "{}\\{}\\Broll".format(toRen, dirName)
-    talentDir = "{}\\{}\\Talent".format(toRen, dirName)
-    scriptDir = "{}\\{}\\Scripts".format(toRen, dirName)
-    renDir = "{}\\{}\\Renders\\LOWRES".format(toRen, dirName)
-
+    # Structure of project directory folders
+    aeDir = os.path.join(toRen, dirName, 'Files', 'AE')
+    preDir = os.path.join(toRen, dirName, 'Files', 'PR')
+    gsDir = os.path.join(toRen, dirName,'GS')
+    imgDir = os.path.join(toRen, dirName, 'Images')
+    audioDir = os.path.join(toRen, dirName, 'Audio')
+    radioDir = os.path.join(toRen, dirName, 'Radio')
+    bRollDir = os.path.join(toRen,dirName,'Broll')
+    talentDir = os.path.join(toRen, dirName, 'Talent')
+    scriptDir = os.path.join(toRen, dirName, 'Scripts')
+    renDir = os.path.join(toRen,dirName,'Renders', 'LOWRES')
+    # Create the directory
     os.makedirs(aeDir)
     os.makedirs(preDir)
     os.makedirs(gsDir)
@@ -149,16 +157,21 @@ def createDir(*args):
     preCopyFile = copy2(preFile, preDir)
     os.rename(aeCopyFile, aeDir + '\\' + dirName + '.aep')
     os.rename(preCopyFile, preDir + '\\' + dirName + '.prproj')
-    # Open the file location in Explorer
+    # Open the file location in Explorer for convenience and confirmation
     openFileLoc("{}\\{}".format(medName, parName), dirName)
 
 def processLabel(label_name):
-    """Process the label name for consistency. Removes all whitespace and capitalizes each word."""
+    """
+    Process the label name for consistency.
+    Removes all whitespace and capitalizes each word.
+    """
+    # Remove whitespace if there is any in the name
     if " " in label_name:
         split_arr = label_name.split(" ")
         capitalized = [x.capitalize() for x in split_arr]
         processed = "".join(capitalized).replace(" ", "")
     else:
+        # if not, keep the same name
         processed = label_name
     return processed
 
@@ -172,14 +185,16 @@ def get_media(media):
     return media_dict.get(media, "Invalid media type")
 
 def close_win():
+    """Destroy the window."""
     mainWin.destroy()
 
+# Window height and width
 mainWin_w = 575
 mainWin_h = 295
 # Create UI Window
 mainWin = Tk()
 mainWin.title("Create New Directory")
-mainWin.geometry("{}x{}".format((mainWin_w + 15), mainWin_h)) # Size dimensions of floating window (W x H)
+mainWin.geometry("{}x{}".format((mainWin_w + 15), mainWin_h))
 
 # Labels for Entry fields
 sn_LabelText = "Spot Title:"
@@ -188,18 +203,26 @@ vn_LabelText = "Version:"
 mn_LabelText = "Month:"
 
 # Store string variables here
-sn_TextVar = StringVar(mainWin) # Spot Name
-fn_TextVar = StringVar(mainWin) # Franchise Name
-vn_TextVar = StringVar(mainWin) # Version Number
-mn_TextVar = StringVar(mainWin) # Month Number
+# Spot Name
+sn_TextVar = StringVar(mainWin)
+# Franchise Name
+fn_TextVar = StringVar(mainWin)
+# Version Number
+vn_TextVar = StringVar(mainWin)
+# Month Number
+mn_TextVar = StringVar(mainWin)
 
 # Default values for String variables
-vn_TextVar.set("001") # Version default : 001
-mn_TextVar.set(curMonth) # Month default: Today's Month Number
-fn_TextVar.set(OPTIONS[0]) # Franchise default: RS2F
-sn_TextVar.set("NewSpotNameHere") # Spot name default: "NewSpotNameHere"
+# Version default : 001
+vn_TextVar.set("001")
+# Month default: Today's Month Number
+mn_TextVar.set(curMonth)
+# Franchise default: RS2F
+fn_TextVar.set(OPTIONS[0])
+# Spot name default: "NewSpotNameHere"
+sn_TextVar.set("NewSpotNameHere")
 
-# Padding for the entry fields widgets
+# Padding for the entry fields widgets and buttons
 padding_Y = 3
 padding_X = 15
 btn_pady = 10
@@ -217,7 +240,7 @@ fn_NameEntry.grid(row=0, column=1, pady=padding_Y, sticky="w")
 fn_NameEntry.config(bg='#3498DB', fg='#FFFFFF',
                     activebackground='#6DB9EC', activeforeground='#5C5C5C', width=25)
 
-# Franchise name destination label
+# Franchise name destination label with ISCI code
 fn_Desc = Listbox(mainWin)
 fn_Desc.grid(row = 0, column=2, pady=padding_Y, rowspan=2, columnspan=2, sticky="w")
 # resize Franchise name label to the 4 - size to keep consistency
@@ -244,7 +267,9 @@ vn_NameEntry.grid(row=3, column=1, pady=padding_Y, padx=5, sticky="w")
 # What is this media intended for?  Broadcast, Digital, Print
 medLabel = Label(mainWin, text="Create project for: ",
                 font=(font_family, font_size, font_weight)).grid(row=4, column=0, pady=padding_Y, sticky="e")
-mediaVar = StringVar(mainWin) # Variable to store the value
+# Variable to store the value
+mediaVar = StringVar(mainWin)
+# Create Radio buttons for the media types available
 med_val1 = Radiobutton(mainWin, text="Broadcast", variable=mediaVar, value="Broadcast", command=sel)
 med_val1.grid(row=4, column=1, sticky="w")
 med_val2 = Radiobutton(mainWin, text="Digital", variable=mediaVar, value="Digital", command=sel)
@@ -273,13 +298,15 @@ for printItem in print_optionsToAppend:
         print_options.append(printItem)
 
 # Create drop down menu for the Digital parent folder
-digi_Var = StringVar(mainWin) # Variable to store the dropdown value
+# Variable to store the dropdown value
+digi_Var = StringVar(mainWin)
 digi_Menu = OptionMenu(mainWin, digi_Var, *digi_options)
 digi_Menu.grid(row=5, column=1, columnspan=2, sticky="w", padx=padding_X*6)
 digi_Menu.config(width=35, background="#999999",
                 activebackground='#6DB9EC', activeforeground='#5C5C5C')
 # Create drop down menu for the Print parent folder
-print_Var = StringVar(mainWin) # Variable to store the dropdown value
+# Variable to store the dropdown value
+print_Var = StringVar(mainWin)
 print_Menu = OptionMenu(mainWin, print_Var, *print_options)
 print_Menu.grid(row=6, column=1, columnspan=2, sticky="w", padx=padding_X*6)
 print_Menu.config(width=35, background="#999999",
@@ -289,14 +316,12 @@ print_Menu.config(width=35, background="#999999",
 med_val1.select()
 digi_Menu.config(state=DISABLED)
 print_Menu.config(state=DISABLED)
-# Set default folder name defaults
-# fn_Desc.config(bg='#C0392B', fg='#FFFFFF')
 
 # Add separator for organization
 sep = ttk.Separator(mainWin, orient="horizontal")
 sep.grid(row=7, column=0, columnspan=4, padx=padding_X, pady=btn_pady, sticky="we")
 
-# Open Projects Directory Location
+# Open Projects Directory Location button
 dirBtn = Button(mainWin, text="Open Projects",
                 command=lambda: openFileLoc(mediaVar.get(), get_media(mediaVar.get())))
 dirBtn.config(bg='#A393B3', fg='#FFFFFF', width=16,
