@@ -1,7 +1,8 @@
-# python-development
-Tools that I'm working on written in Python
+# Custom Projects Directory Manager
 
 **createDirectory.py** is a project directory creator that I made using Tkinter to learn how to build GUI in Python. It allows you to quickly access the directory on your drive, pointing to the location the drop down parameters are pointing to. The lists are populated with existing folders in the pointed locations.
+
+This script allows the user to create project folder with very specific parameters to place it on the server with very orgainized naming convention that allows for ease of identification. Every folder will be unique to the location.
 
 ## Features for createDirectory.py:
 
@@ -12,7 +13,7 @@ Tools that I'm working on written in Python
 - Will suffix the label with a pad3 version number
 - Uses logic to decide where the final directory should go according to the pointed directory
 - Uses color highlighting to show important entry fields in the GUI
-- Auto update the listbox depending on the selected parameter for the dropdown
+- Dynamically populate listbox depending on the selected parameter for the dropdown
 - Button to open the file location in Explorer for quick navigation
 - Button to close the GUI window
 - Button to create the directory
