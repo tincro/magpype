@@ -10,7 +10,7 @@ This script allows the user to create project folder with very specific paramete
 - Copies a template project from Asset drive into pointed directory location and renames it
 - Process the label name to remove white space and capitalcase the string text
 - Will prefix the label name with the current year to add unique names in the folder
-- Will suffix the label with a pad3 version number
+- Will suffix the label with a 3-padding version number
 - Uses logic to decide where the final directory should go according to the pointed directory
 - Uses color highlighting to show important entry fields in the GUI
 - Dynamically populate listbox depending on the selected parameter for the dropdown
