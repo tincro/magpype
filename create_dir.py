@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+# !/usr/bin/python3
 
 import os
 import re
@@ -8,15 +8,6 @@ from shutil import copy2
 from datetime import date
 from tkinter import *
 from tkinter import ttk
-
-# Location of where to put the Directory
-home = os.getcwd()
-desktop = os.path.join(home,"Desktop","")
-
-# What month is it? Return as padded decimal Number
-d = date.today()
-current_month = d.strftime('%m')
-current_year = d.strftime('%y')
 
 # Drop down options for the Franchise information
 OPTIONS = [
@@ -52,24 +43,44 @@ BRANDS = {
     "Tent_Sale": ["TS"]
 }
 
+DAYS = {
+    1: "JAN",
+    2: "FEB",
+    3: "MAR",
+    4: "APR",
+    5: "MAY",
+    6: "JUL",
+    7: "JUN",
+    8: "AUG",
+    9: "SEP",
+    10: "OCT",
+    11: "NOV",
+    12: "DEC"
+}
+
+d = date.today()
+current_month = d.strftime('%m')
+current_year = d.strftime('%y')
+
 default_dir = "R:\\Broadcast"
 default_drive = "R:"
-# Open the project directory location in Explorer
+
 def openpath(*args):
     """Open the file location on the disk."""
     if len(args) > 1:
-        # file_path = os.path.join(default_drive, args[0], args[1])
-        # print(file_path)
         subprocess.Popen('explorer {}\\{}\\{}'.format(default_drive, args[0], args[1]))
     else:
         subprocess.Popen('explorer {}'.format(default_dir))
 
-# Decides which brand the folder belongs to per Franchise name
+def get_month(month):
+    """Get the calendar month string."""
+    month_num = int(month)
+    return DAYS[month_num]
+
 def brandname(brandName):
     """Find which brand in the dictionary and return the proper label."""
     return BRANDS[brandName]
 
-#  Activate the dropdown per the radiobutton selected
 def sel():
     """Select which medium this project is for."""
     if(media_var.get() == "Digital"):
@@ -89,6 +100,20 @@ def on_brand_change(*args):
         destination.insert(END, item)
     destination.activate(0)
 
+def make_folders(render_directory, directory_name, folders):
+    """Make folders for the directory given the list of folders to make"""
+    for folder in folders:
+        dir = os.path.join(render_directory, directory_name, folder)
+        os.makedirs(dir)
+
+def copy_template(path_to_file, destination, new_file_name, file_extension):
+    """Copy the template file into the new directory with correct naming."""
+    file_name = "{0}.{1}".format(path_to_file, file_extension)
+    file_copy = copy2(file_name, destination)
+    file_rename = "{0}.{1}".format(
+                os.path.join(destination, new_file_name), file_extension)
+    os.rename(file_copy, file_rename)
+
 # Build directory to the desired location per entry fields when button pressed
 def create_dir(*args):
     """Create a directory with the given parameters as the name of the directory.
@@ -96,71 +121,54 @@ def create_dir(*args):
     # Decide which type of Media the directory belongs to
     media = media_var.get()
     if(media == "Digital"):
-        # if media is Digital
         parent_dir = digital_var.get()
     elif(media == "Print"):
-        # if media is Print
         parent_dir = print_var.get()
     else:
-        #  Get franchise name. Broadcast is default
         parent_dir = brand_var.get()
 
     # Grab the directory parent Location  EX. ..\Broadcast\Ford\
+    # Grabs the current name for each part of the dir to build the location
     render_dir = "R:\\{}\\{}".format(media, parent_dir)
-    # Grab the ISCI code for the spot
     brand_name = destination.get(ACTIVE)
-    # Television Spot name variable from user input
     spot_name = process_label(spot_entry.get())
-    # version number from user input
     version_name = version_entry.get()
-    # get month number from user input
-    month_name = month_entry.get()
-
-    # EX. .._19-MyCampaignName_..
+    month_number = month_entry.get()
+    month_name = get_month(month_number)
     campaign_name = current_year + "-" + spot_name
 
-    join_dirs = (brand_name, month_name, campaign_name, version_name.zfill(3))
-    # directory name EX: RS2F_12_TruckMonth_v001
+    join_dirs = (brand_name, month_number, month_name,
+                campaign_name, version_name.zfill(3))
     dir_name = "_".join(join_dirs)
 
-    # Path to copy
-    ae_path  = os.path.join('S:','Templates','Files','Ae')
-    pre_path = os.path.join('S:','Templates','Files','Pre')
-    # Files to copy
-    ae_temp = 'Code_CampaignNumber_CampaignName_Version_001.aep'
-    pre_temp = 'Code_CampaignNumber_CampaignName_Version_001.prproj'
+    ae_dir = os.path.join('Files','AE')
+    pr_dir = os.path.join('Files', 'PR')
+    folder_list = [
+        'Audio',
+        'Broll',
+        ae_dir,
+        pr_dir,
+        'Graphics',
+        'Images',
+        'Radio',
+        os.path.join('Render','LOWRES')
+    ]
 
-    ae_file  = os.path.join(ae_path,ae_temp)
-    pre_file = os.path.join(pre_path, pre_temp)
+    make_folders(render_dir, dir_name, folder_list)
 
-    # Structure of project directory folders
-    ae_dir     = os.path.join(render_dir, dir_name, 'Files', 'AE')
-    pre_dir    = os.path.join(render_dir, dir_name, 'Files', 'PR')
-    gs_dir     = os.path.join(render_dir, dir_name,'GS')
-    img_dir    = os.path.join(render_dir, dir_name, 'Images')
-    audio_dir  = os.path.join(render_dir, dir_name, 'Audio')
-    radio_dir  = os.path.join(render_dir, dir_name, 'Radio')
-    broll_dir  = os.path.join(render_dir,dir_name,'Broll')
-    talent_dir = os.path.join(render_dir, dir_name, 'Talent')
-    script_dir = os.path.join(render_dir, dir_name, 'Scripts')
-    render_dir    = os.path.join(render_dir, dir_name,'Renders', 'LOWRES')
-    # Create the directory
-    os.makedirs(ae_dir)
-    os.makedirs(pre_dir)
-    os.makedirs(gs_dir)
-    os.makedirs(img_dir)
-    os.makedirs(audio_dir)
-    os.makedirs(radio_dir)
-    os.makedirs(broll_dir)
-    os.makedirs(talent_dir)
-    os.makedirs(script_dir)
-    os.makedirs(render_dir)
+    template_path = os.path.join('S:', 'Templates')
+    temp_file_name = 'Code_CampaignNumber_CampaignName_Version_001'
 
-    # Copy AE and PR file templates, rename to dir_name
-    ae_copy = copy2(ae_file, ae_dir)
-    pre_copy = copy2(pre_file, pre_dir)
-    os.rename(ae_copy, ae_dir + '\\' + dir_name + '.aep')
-    os.rename(pre_copy, pre_dir + '\\' + dir_name + '.prproj')
+    ae_path = os.path.join(template_path, ae_dir)
+    ae_file = os.path.join(ae_path, temp_file_name)
+    ae_dest = os.path.join(render_dir, dir_name, ae_dir)
+
+    pr_path = os.path.join(template_path, pr_dir)
+    pr_file = os.path.join(pr_path, temp_file_name)
+    pr_dest = os.path.join(render_dir, dir_name, pr_dir)
+
+    copy_template(ae_file, ae_dest, dir_name, 'aep')
+    copy_template(pr_file, pr_dest, dir_name, 'prproj')
     # Open the file location in Explorer for convenience and confirmation
     openpath("{}\\{}".format(media, parent_dir), dir_name)
 
@@ -189,6 +197,7 @@ def get_media(media):
     return media_dict.get(media, "Invalid media type")
 
 def populate(source, destination):
+    """Dynamically populate the dropdownlist with existing folders"""
     for item in source:
         if(item.startswith(".")):
             continue
