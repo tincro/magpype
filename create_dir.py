@@ -73,7 +73,7 @@ def openpath(*args):
         subprocess.Popen('explorer {}'.format(default_dir))
 
 def get_month(month):
-    """Get the calendar month string."""
+    """Get the calendar month to string."""
     month_num = int(month)
     return DAYS[month_num]
 
@@ -82,7 +82,7 @@ def brandname(brandName):
     return BRANDS[brandName]
 
 def sel():
-    """Select which medium this project is for."""
+    """Callback to select which medium this project is for."""
     if(media_var.get() == "Digital"):
         digital_menu.config(state = ACTIVE, bg='#3498DB', fg='#FFFFFF')
     else:
@@ -129,16 +129,18 @@ def create_dir(*args):
 
     # Grab the directory parent Location  EX. ..\Broadcast\Ford\
     # Grabs the current name for each part of the dir to build the location
-    render_dir = "R:\\{}\\{}".format(media, parent_dir)
+    render_dir = os.path.join("R:", media, parent_dir)
     brand_name = destination.get(ACTIVE)
     spot_name = process_label(spot_entry.get())
     version_name = version_entry.get()
     month_number = month_entry.get()
     month_name = get_month(month_number)
-    campaign_name = current_year + "-" + spot_name
+    unique_name = (current_year, spot_name)
+    campaign_name = "-".join(unique_name)
+    version_padding = 3
 
     join_dirs = (brand_name, month_number, month_name,
-                campaign_name, version_name.zfill(3))
+                campaign_name, version_name.zfill(version_padding))
     dir_name = "_".join(join_dirs)
 
     ae_dir = os.path.join('Files','AE')
@@ -173,17 +175,13 @@ def create_dir(*args):
     openpath("{}\\{}".format(media, parent_dir), dir_name)
 
 def process_label(label_name):
-    """
-    Process the label name for consistency.
-    Removes all whitespace and capitalizes each word.
-    """
-    # Remove whitespace if there is any in the name
+    """Process the label name for consistency.
+    Removes all whitespace and capitalizes each word."""
     if " " in label_name:
         split_arr = label_name.split(" ")
         capitalized = [x.capitalize() for x in split_arr]
         processed = "".join(capitalized).replace(" ", "")
     else:
-        # if not, keep the same name
         processed = label_name
     return processed
 
@@ -224,23 +222,15 @@ version_text = "Version:"
 month_text = "Month:"
 
 # Store string variables here
-# Spot Name
 spot_var = StringVar(window)
-# Franchise Name
 brand_var = StringVar(window)
-# Version Number
 version_var = StringVar(window)
-# Month Number
 month_var = StringVar(window)
 
 # Default values for String variables
-# Version default : 001
 version_var.set("1")
-# Month default: Today's Month Number
 month_var.set(current_month)
-# Franchise default: RS2F
 brand_var.set(OPTIONS[0])
-# Spot name default: "NewSpotNameHere"
 spot_var.set("NewSpotNameHere")
 
 # Padding for the entry fields widgets and buttons
@@ -312,7 +302,6 @@ media_label = Label(
                     font=(font_family, font_size, font_weight)
                 ).grid(row=4, column=0, pady=pady, sticky="e")
 
-# Variable to store the value
 media_var = StringVar(window)
 # Create Radio buttons for the media types available
 broadcast_btn = Radiobutton(
@@ -343,13 +332,13 @@ print_btn = Radiobutton(
 print_btn.grid(row=6, column=1, sticky="w")
 
 # Dynamically populate the Digital dropdown list
-digital_dir = "R:\\Digital\\"
+digital_dir = os.path.join("R:", "Digital")
 digital_list = []
 digital_pop = os.listdir(digital_dir)
 populate(digital_pop, digital_list)
 
 # Dynamically populate the Print dropdown list
-print_folder = "R:\\Print\\"
+print_folder = os.path.join("R:", "Print")
 print_options = []
 print_pop = os.listdir(print_folder)
 populate(print_pop, print_options)
