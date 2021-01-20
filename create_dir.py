@@ -106,13 +106,18 @@ def make_folders(render_directory, directory_name, folders):
         dir = os.path.join(render_directory, directory_name, folder)
         os.makedirs(dir)
 
-def copy_template(path_to_file, destination, new_file_name, file_extension):
+def rename_template(file, destination):
+    os.rename(file, destination)
+
+def copy_template(path_to_file, destination, new_file_name,
+                    file_extension, rename=True):
     """Copy the template file into the new directory with correct naming."""
     file_name = "{0}.{1}".format(path_to_file, file_extension)
     file_copy = copy2(file_name, destination)
     file_rename = "{0}.{1}".format(
                 os.path.join(destination, new_file_name), file_extension)
-    os.rename(file_copy, file_rename)
+    if rename:
+        rename_template(file_copy, file_rename)
 
 # Build directory to the desired location per entry fields when button pressed
 def create_dir(*args):
@@ -164,13 +169,34 @@ def create_dir(*args):
     ae_path = os.path.join(template_path, ae_dir)
     ae_file = os.path.join(ae_path, temp_file_name)
     ae_dest = os.path.join(render_dir, dir_name, ae_dir)
+    copy_template(ae_file, ae_dest, dir_name, 'aep')
 
     pr_path = os.path.join(template_path, pr_dir)
     pr_file = os.path.join(pr_path, temp_file_name)
     pr_dest = os.path.join(render_dir, dir_name, pr_dir)
-
-    copy_template(ae_file, ae_dest, dir_name, 'aep')
     copy_template(pr_file, pr_dest, dir_name, 'prproj')
+
+    sizzle_dir = 'Broll'
+    sizzle_template = '{}_sizzle_reel'.format(brand_var.get())
+    sizzle_path = os.path.join(template_path, sizzle_dir)
+    sizzle_file = os.path.join(sizzle_path, sizzle_template)
+    sizzle_dest = os.path.join(render_dir, dir_name, sizzle_dir)
+    copy_template(sizzle_file, sizzle_dest, dir_name, 'txt', False)
+
+    endcard_dir = 'Graphics'
+    endcard_template = '{}_endcard'.format(brand_var.get())
+    endcard_path  = os.path.join(template_path, endcard_dir)
+    endcard_file = os.path.join(endcard_path, endcard_template)
+    endcard_dest = os.path.join(render_dir, dir_name, endcard_dir)
+    copy_template(endcard_file, endcard_dest, dir_name, 'txt', False)
+
+    lower_dir = 'Images'
+    lower_template = '{}_lower_thirds'.format(brand_var.get())
+    lower_path = os.path.join(template_path, lower_dir)
+    lower_file = os.path. join(lower_path, lower_template)
+    lower_dest = os.path.join(render_dir, dir_name, lower_dir)
+    copy_template(lower_file, lower_dest, dir_name, 'txt', False)
+
     # Open the file location in Explorer for convenience and confirmation
     openpath("{}\\{}".format(media, parent_dir), dir_name)
 
