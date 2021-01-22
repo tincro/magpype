@@ -31,7 +31,7 @@ class AC_Magpype_GUI:
 
         # Styling
         self.font_size = 12
-        self.font_family = 'Oswald'
+        self.font_family = 'Roboto'
         self.font_weight = 'bold'
         self.blue = '#3498DB'
         self.active_blue = '#6DB9EC'
@@ -199,7 +199,7 @@ class AC_Magpype_GUI:
                             activeforeground=self.disable_grey)
         self.close_btn.grid(row=8, column=2, padx=self.padx, sticky="e")
 
-        #self.window.mainloop()
+
 
     def close_win(self):
         """Callback to destroy the window."""
