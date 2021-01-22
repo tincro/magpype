@@ -4,7 +4,7 @@ import os
 from tkinter import *
 from tkinter import ttk
 
-import ac_manager as acm
+from ac_manager import *
 
 class AC_Magpype_GUI:
     """Class for creating floating desktop window. Framework for organization of
@@ -12,7 +12,7 @@ class AC_Magpype_GUI:
 
     def __init__(self, window, manager):
         self.manager = manager
-        self.date = acm.AC_DateManager()
+        self.date = AC_DateManager()
 
         # Window construction information
         self.window = window
@@ -145,20 +145,20 @@ class AC_Magpype_GUI:
         self.print_btn.grid(row=6, column=1, sticky="w")
         #TODO
         # Dynamically populate the Digital dropdown list
-        digital_dir = AC_ProjectList(self.manager.digital_dir)
+        self.digital_dir = AC_ProjectList(self.manager.digital_dir)
 
         # Dynamically populate the Print dropdown list
-        print_dir = AC_ProjectList(self.manager.print_dir)
+        self.print_dir = AC_ProjectList(self.manager.print_dir)
 
         self.digital_var = StringVar(self.window)
-        self.digital_menu = OptionMenu(self.window, self.digital_var, *digital_list)
+        self.digital_menu = OptionMenu(self.window, self.digital_var, *self.digital_dir.list)
         self.digital_menu.grid(row=5, column=1, columnspan=2, sticky="w", padx=self.padx*6)
         self.digital_menu.config(width=35, background=self.grey,
                                 activebackground=self.active_blue,
                                 activeforeground=self.disable_grey)
 
         self.print_var = StringVar(self.window)
-        self.print_menu = OptionMenu(self.window, self.print_var, *print_options)
+        self.print_menu = OptionMenu(self.window, self.print_var, *self.print_dir.list)
         self.print_menu.grid(row=6, column=1, columnspan=2, sticky="w", padx=self.padx*6)
         self.print_menu.config(width=35, background=self.grey,
                             activebackground=self.active_blue,
@@ -176,7 +176,7 @@ class AC_Magpype_GUI:
         # Open Projects Directory Location button
         self.open_btn_text = "Open Projects"
         self.open_btn = Button(self.window, text=self.open_btn_text,
-                                command=lambda: openpath(self.media_var.get(),
+                                command=lambda: self.manager.openpath(self.media_var.get(),
                                 self.get_media_path(self.media_var.get())))
         self.open_btn.config(bg=self.purple, fg=self.white, width=16,
                                 activebackground=self.active_purple,
@@ -189,7 +189,7 @@ class AC_Magpype_GUI:
         self.create_btn.config(bg=self.blue, fg=self.white, width=self.btn_padx,
                                 activebackground=self.active_blue,
                                 activeforeground=self.disable_grey)
-        create_btn.grid(row=8, column=1, sticky="w")
+        self.create_btn.grid(row=8, column=1, sticky="w")
 
 
         self.close_btn = Button(self.window, text="Close", command=self.close_win)
@@ -219,7 +219,7 @@ class AC_Magpype_GUI:
         version_name = self.version_entry.get()
         month_number = self.month_entry.get()
         month_name = self.date.get_month(month_number)
-        unique_name = (self.date.current_year, self.spot_name)
+        unique_name = (self.date.current_year, spot_name)
         campaign_name = "-".join(unique_name)
         version_padding = 3
 
@@ -310,6 +310,6 @@ class AC_Magpype_GUI:
 
 
 window = Tk()
-manager = acm.AC_PathManager()
+manager = AC_PathManager()
 gui = AC_Magpype_GUI(window, manager)
 window.mainloop()

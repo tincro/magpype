@@ -51,7 +51,7 @@ class AC_ProjectList:
     def __init__(self, dir_name):
         self.dir_name = dir_name
         self.list = []
-        self.pop = os.listdir(dir_name)
+        self.pop = os.listdir(self.dir_name)
         self.populate(self.pop, self.list)
 
     def populate(self, source, destination):
