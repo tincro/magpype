@@ -177,7 +177,7 @@ class AC_Magpype_GUI:
         # Open Projects Directory Location button
         self.open_btn_text = "Open Projects"
         self.open_btn = Button(self.window, text=self.open_btn_text,
-                                command=lambda: self.manager.openpath(self.media_var.get(),
+                                command=lambda: self.openpath(self.media_var.get(),
                                 self.get_media_path(self.media_var.get())))
         self.open_btn.config(bg=self.purple, fg=self.white, width=16,
                                 activebackground=self.active_purple,
@@ -243,7 +243,7 @@ class AC_Magpype_GUI:
 
         self.manager.make_folders(render_dir, dir_name, folder_list)
 
-        template_path = os.path.join('S:', 'Templates')
+        template_path = self.manager.template_dir
         temp_file_name = 'Code_CampaignNumber_CampaignName_Version_001'
 
         ae_path = os.path.join(template_path, ae_dir)
@@ -278,7 +278,7 @@ class AC_Magpype_GUI:
         self.manager.copy_template(lower_file, lower_dest, dir_name, 'txt', False)
 
         # Open the file location in Explorer for convenience and confirmation
-        self.manager.openpath("{0}\\{1}".format(media, parent_dir), dir_name)
+        self.openpath("{0}\\{1}".format(media, parent_dir), dir_name)
 
     def get_media_path(self, media):
         """Callback to return the media variable value."""
@@ -295,6 +295,14 @@ class AC_Magpype_GUI:
         for item in self.manager.brandname(self.brand_var.get()):
             self.destination.insert(END, item)
         self.destination.activate(0)
+
+    def openpath(self,*args):
+        """Callback to open the file location on the disk."""
+        if len(args) > 1:
+            subprocess.Popen('explorer {}\\{}\\{}'.format(self.manager.project_drive, args[0], args[1]))
+        else:
+            subprocess.Popen('explorer {}'.format(self.manager.default_dir))
+
 
     def sel(self):
         """Callback to select which medium this project is for."""

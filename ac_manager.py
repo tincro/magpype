@@ -41,6 +41,9 @@ broadcast_dir = os.path.join(project_drive,"Broadcast")
 digital_dir = os.path.join(project_drive, "Digital")
 print_dir = os.path.join(project_drive, "Print")
 
+template_drive = "S:"
+template_dir = os.path.join(template_drive, "Templates")
+
 class AC_ProjectList:
     """List of projects in a directory."""
     def __init__(self, dir_name):
@@ -61,12 +64,17 @@ class AC_ProjectList:
 class AC_PathManager:
     """Management class for path building."""
     def __init__(self, project_drive=project_drive, broadcast_dir=broadcast_dir,
-                digital_dir=digital_dir, print_dir=print_dir, options=OPTIONS,
-                id_code_dict=BRANDS):
+                digital_dir=digital_dir, print_dir=print_dir,
+                template_drive=template_drive, template_dir=template_dir,
+                options=OPTIONS, id_code_dict=BRANDS):
         self.project_drive = project_drive
         self.broadcast_dir = broadcast_dir
         self.digital_dir = digital_dir
         self.print_dir = print_dir
+
+        self.template_drive = template_drive
+        self.template_dir = template_dir
+
         self.options = options
         self.id_code = id_code_dict
 
@@ -93,16 +101,10 @@ class AC_PathManager:
             dir = os.path.join(render_directory, directory_name, folder)
             os.makedirs(dir)
 
-    def openpath(self,*args):
-        """Callback to open the file location on the disk."""
-        if len(args) > 1:
-            subprocess.Popen('explorer {}\\{}\\{}'.format(self.project_drive, args[0], args[1]))
-        else:
-            subprocess.Popen('explorer {}'.format(self.default_dir))
-
     def process_label(self, label_name):
         """Process the label name for consistency.
-        Removes all whitespace and capitalizes each word."""
+        Removes all whitespace and capitalizes each word. Will not process if no
+        whitespace exists."""
         if " " in label_name:
             split_arr = label_name.split(" ")
             capitalized = [x.capitalize() for x in split_arr]
