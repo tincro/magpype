@@ -256,21 +256,21 @@ class AC_Magpype_GUI:
         self.manager.copy_template(pr_file, pr_dest, dir_name, 'prproj')
 
         sizzle_dir = 'Broll'
-        sizzle_template = '{}_sizzle_reel'.format(brand_var.get())
+        sizzle_template = '{}_sizzle_reel'.format(self.brand_var.get())
         sizzle_path = os.path.join(template_path, sizzle_dir)
         sizzle_file = os.path.join(sizzle_path, sizzle_template)
         sizzle_dest = os.path.join(render_dir, dir_name, sizzle_dir)
         self.manager.copy_template(sizzle_file, sizzle_dest, dir_name, 'txt', False)
 
         endcard_dir = 'Graphics'
-        endcard_template = '{}_endcard'.format(brand_var.get())
+        endcard_template = '{}_endcard'.format(self.brand_var.get())
         endcard_path  = os.path.join(template_path, endcard_dir)
         endcard_file = os.path.join(endcard_path, endcard_template)
         endcard_dest = os.path.join(render_dir, dir_name, endcard_dir)
         self.manager.copy_template(endcard_file, endcard_dest, dir_name, 'txt', False)
 
         lower_dir = 'Images'
-        lower_template = '{}_lower_thirds'.format(brand_var.get())
+        lower_template = '{}_lower_thirds'.format(self.brand_var.get())
         lower_path = os.path.join(template_path, lower_dir)
         lower_file = os.path. join(lower_path, lower_template)
         lower_dest = os.path.join(render_dir, dir_name, lower_dir)
@@ -308,8 +308,8 @@ class AC_Magpype_GUI:
             self.print_menu.config(state = DISABLED, bg=self.grey)
 
 
-
-window = Tk()
-manager = AC_PathManager()
-gui = AC_Magpype_GUI(window, manager)
-window.mainloop()
+if __name__ == "__main__":
+    window = Tk()
+    manager = AC_PathManager()
+    gui = AC_Magpype_GUI(window, manager)
+    window.mainloop()
