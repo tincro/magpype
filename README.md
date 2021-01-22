@@ -17,3 +17,9 @@ This script allows the user to create project folder with very specific paramete
 - Button to open the file location in Explorer for quick navigation
 - Convenience Button to close the GUI window
 - Button to create the directory
+
+## Running the script
+
+If you run ac_magpype_gui.py from main, the script will run and build the GUI. It uses ac_manager as to control certain functionalities, you can replace the manager when passing to the contstructor for custom layouts. However so far, the script still relies on it for certain functionalities to run. These functionalities are mostly optional however, and will be more modular in future release. 
+
+
