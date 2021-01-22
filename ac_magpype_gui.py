@@ -16,7 +16,7 @@ class AC_Magpype_GUI:
 
         # Window construction information
         self.window = window
-        self.window.title = "Create New Project"
+        self.title = "Create New Project"
         self.winx = 575
         self.winy = 295
         self.padx = 15
@@ -26,6 +26,7 @@ class AC_Magpype_GUI:
         self.option_w = 25
         self.entry_pad = 5
         self.entry_grid_padx = 5
+        self.window.title(self.title)
         self.window.geometry("{0}x{1}".format((self.winx + self.padx), self.winy))
 
         # Styling

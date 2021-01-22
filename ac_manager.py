@@ -41,11 +41,6 @@ broadcast_dir = os.path.join(project_drive,"Broadcast")
 digital_dir = os.path.join(project_drive, "Digital")
 print_dir = os.path.join(project_drive, "Print")
 
-# digital_dir = acm.digital_dir
-# digital_list = []
-# digital_pop = os.listdir(digital_dir)
-# populate(digital_pop, digital_list)
-
 class AC_ProjectList:
     """List of projects in a directory."""
     def __init__(self, dir_name):
