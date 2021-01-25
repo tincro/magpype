@@ -1,4 +1,4 @@
-# AC-RSPipeline -- A Custom Projects Directory Management Framework
+# AC-Magpype -- A Custom Projects Directory Management Framework
 
 This is a project directory creation framework that I made using Tkinter to learn how to build GUIs in Python. It allows you to quickly access the directory on your drive, pointing to the location the drop down parameters are pointing to. The lists are populated with existing folders in the pointed locations.
 
