@@ -4,6 +4,8 @@ This is a project directory creation framework that I made using Tkinter to lear
 
 This script allows the user to create project folder with very specific parameters to place it on the server with very orgainized naming convention that allows for ease of identification. Every folder will be unique to the location.
 
+![Preview of the GUI](/img/ac_magpype_gui_preview.JPG)
+
 ## Some highlights for this project
 
 - Creates a project directory structure that is named in a very organized way
