@@ -38,15 +38,15 @@ class AC_Magpype_GUI:
         self.font_size = 12
         self.font_family = 'Roboto'
         self.font_weight = 'bold'
-        self.blue = '#3498DB'
-        self.active_blue = '#6DB9EC'
-        self.white = '#FFFFFF'
-        self.grey = '#999999'
-        self.disable_grey = '#5C5C5C'
-        self.purple = '#A393B3'
-        self.active_purple = '#B8A7CA'
-        self.red = '#C0392B'
-        self.active_red = '#E55647'
+        self.main_btn_clr = '#3498DB'
+        self.main_active_clr = '#6DB9EC'
+        self.btn_font_clr = '#FFFFFF'
+        self.disable_btn_clr = '#999999'
+        self.btn_active_font_clr = '#5C5C5C'
+        self.open_btn_clr = '#A393B3'
+        self.open_active_clr = '#B8A7CA'
+        self.close_btn_clr = '#C0392B'
+        self.close_active_clr = '#E55647'
 
         # Build the UI information
         self.brand_label_text = "Brand Name:"
@@ -61,9 +61,9 @@ class AC_Magpype_GUI:
         self.brand_menu = OptionMenu(self.window, self.brand_var, *self.manager.options,
                                 command=self.on_brand_change)
         self.brand_menu.grid(row=0, column=1, pady=self.pady, sticky="w")
-        self.brand_menu.config(bg=self.blue, fg=self.white,
-                            activebackground=self.active_blue,
-                            activeforeground=self.disable_grey, width=self.option_w
+        self.brand_menu.config(bg=self.main_btn_clr, fg=self.btn_font_clr,
+                            activebackground=self.main_active_clr,
+                            activeforeground=self.btn_active_font_clr, width=self.option_w
         )
 
         # Brand name destination label with ISCI code
@@ -159,16 +159,16 @@ class AC_Magpype_GUI:
         self.digital_var = StringVar(self.window)
         self.digital_menu = OptionMenu(self.window, self.digital_var, *self.digital_dir.list)
         self.digital_menu.grid(row=5, column=1, columnspan=2, sticky="w", padx=self.padx*6)
-        self.digital_menu.config(width=35, background=self.grey,
-                                activebackground=self.active_blue,
-                                activeforeground=self.disable_grey)
+        self.digital_menu.config(width=35, background=self.disable_btn_clr,
+                                activebackground=self.main_active_clr,
+                                activeforeground=self.btn_active_font_clr)
 
         self.print_var = StringVar(self.window)
         self.print_menu = OptionMenu(self.window, self.print_var, *self.print_dir.list)
         self.print_menu.grid(row=6, column=1, columnspan=2, sticky="w", padx=self.padx*6)
-        self.print_menu.config(width=35, background=self.grey,
-                            activebackground=self.active_blue,
-                            activeforeground=self.disable_grey)
+        self.print_menu.config(width=35, background=self.disable_btn_clr,
+                            activebackground=self.main_active_clr,
+                            activeforeground=self.btn_active_font_clr)
 
         # Set default button pressed for media_var and disable the drop downs
         self.broadcast_btn.select()
@@ -184,24 +184,24 @@ class AC_Magpype_GUI:
         self.open_btn = Button(self.window, text=self.open_btn_text,
                                 command=lambda: self.openpath(self.media_var.get(),
                                 self.get_media_path(self.media_var.get())))
-        self.open_btn.config(bg=self.purple, fg=self.white, width=16,
-                                activebackground=self.active_purple,
-                                activeforeground=self.disable_grey)
+        self.open_btn.config(bg=self.open_btn_clr, fg=self.btn_font_clr, width=16,
+                                activebackground=self.open_active_clr,
+                                activeforeground=self.btn_active_font_clr)
         self.open_btn.grid(row=8, column=0, padx=self.padx, sticky="e")
 
 
         self.create_btn_text = "Create Project"
         self.create_btn = Button(self.window, text=self.create_btn_text, command=self.create_dir)
-        self.create_btn.config(bg=self.blue, fg=self.white, width=self.btn_padx,
-                                activebackground=self.active_blue,
-                                activeforeground=self.disable_grey)
+        self.create_btn.config(bg=self.main_btn_clr, fg=self.btn_font_clr, width=self.btn_padx,
+                                activebackground=self.main_active_clr,
+                                activeforeground=self.btn_active_font_clr)
         self.create_btn.grid(row=8, column=1, sticky="w")
 
 
         self.close_btn = Button(self.window, text="Close", command=self.close_win)
-        self.close_btn.config(bg=self.red, fg=self.white, width=self.btn_padx,
-                            activebackground=self.active_red,
-                            activeforeground=self.disable_grey)
+        self.close_btn.config(bg=self.close_btn_clr, fg=self.btn_font_clr, width=self.btn_padx,
+                            activebackground=self.close_active_clr,
+                            activeforeground=self.btn_active_font_clr)
         self.close_btn.grid(row=8, column=2, padx=self.padx, sticky="e")
 
     def close_win(self):
@@ -301,14 +301,14 @@ class AC_Magpype_GUI:
     def sel(self):
         """Callback to select which medium this project is for."""
         if(self.media_var.get() == self.media_btns[1]):
-            self.digital_menu.config(state = ACTIVE, bg=self.blue, fg=self.white)
+            self.digital_menu.config(state = ACTIVE, bg=self.main_btn_clr, fg=self.btn_font_clr)
         else:
-            self.digital_menu.config(state = DISABLED, bg=self.grey)
+            self.digital_menu.config(state = DISABLED, bg=self.disable_btn_clr)
 
         if(self.media_var.get() == self.media_btns[2]):
-            self.print_menu.config(state = ACTIVE, bg=self.blue, fg=self.white)
+            self.print_menu.config(state = ACTIVE, bg=self.main_btn_clr, fg=self.btn_font_clr)
         else:
-            self.print_menu.config(state = DISABLED, bg=self.grey)
+            self.print_menu.config(state = DISABLED, bg=self.disable_btn_clr)
 
 
 if __name__ == "__main__":
