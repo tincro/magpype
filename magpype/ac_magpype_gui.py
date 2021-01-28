@@ -149,7 +149,7 @@ class AC_Magpype_GUI:
                             command=self.sel
         )
         self.print_btn.grid(row=6, column=1, sticky="w")
-        
+
         # Dynamically populate the Digital dropdown list
         self.digital_dir = AC_ProjectList(self.manager.digital_dir)
 
@@ -204,8 +204,6 @@ class AC_Magpype_GUI:
                             activeforeground=self.disable_grey)
         self.close_btn.grid(row=8, column=2, padx=self.padx, sticky="e")
 
-
-
     def close_win(self):
         """Callback to destroy the window."""
         self.window.destroy()
@@ -248,21 +246,20 @@ class AC_Magpype_GUI:
 
         self.manager.make_folders(render_dir, dir_name, folder_list)
 
-        template_path = self.manager.template_dir
         temp_file_name = 'Code_CampaignNumber_CampaignName_Version_001'
 
-        project_path = os.path.join(render_dir, dir_name)        
+        project_path = os.path.join(render_dir, dir_name)
 
         ae_template = AC_Template(temp_file_name, 'aep', ae_dir, project_path)
         ae_template.copy_template(dir_name)
 
-        pr_template = AC_Template(template_file_name, 'prproj', pr_dir, project_path)
+        pr_template = AC_Template(temp_file_name, 'prproj', pr_dir, project_path)
         pr_template.copy_template(dir_name)
 
         sizzle_dir = 'Broll'
         sizzle_temp_name = '{}_sizzle_reel'.format(self.brand_var.get())
         sizzle_template = AC_Template(sizzle_temp_name, 'txt', sizzle_dir, project_path)
-        sizzle_template.copy_template(dir_name, rename=False)        
+        sizzle_template.copy_template(dir_name, rename=False)
 
         endcard_dir = 'Graphics'
         endcard_temp_name = '{}_endcard'.format(self.brand_var.get())
@@ -273,11 +270,6 @@ class AC_Magpype_GUI:
         lower_temp_name = '{}_lower_thirds'.format(self.brand_var.get())
         lower_template = AC_Template(lower_temp_name, 'txt', lower_dir, project_path)
         lower_template.copy_template(dir_name, rename=False)
-
-        # lower_path = os.path.join(template_path, lower_dir)
-        # lower_file = os.path. join(lower_path, lower_template)
-        # lower_dest = os.path.join(render_dir, dir_name, lower_dir)
-        # self.manager.copy_template(lower_file, lower_dest, dir_name, 'txt', False)
 
         # Open the file location in Explorer for convenience and confirmation
         self.openpath("{0}\\{1}".format(media, parent_dir), dir_name)
