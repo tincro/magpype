@@ -2,9 +2,6 @@
 """
 This module is designed to build a floating window GUI's.
 It was designed as a solution for a project framework in a small studio.
-
-Developer: Austin Cronin
-Email: austin.cronin3d@gmail.com
 """
 
 import os
@@ -254,36 +251,33 @@ class AC_Magpype_GUI:
         template_path = self.manager.template_dir
         temp_file_name = 'Code_CampaignNumber_CampaignName_Version_001'
 
-        ae_path = os.path.join(template_path, ae_dir)
-        ae_file = os.path.join(ae_path, temp_file_name)
-        ae_dest = os.path.join(render_dir, dir_name, ae_dir)
-        self.manager.copy_template(ae_file, ae_dest, dir_name, 'aep')
+        project_path = os.path.join(render_dir, dir_name)        
 
-        pr_path = os.path.join(template_path, pr_dir)
-        pr_file = os.path.join(pr_path, temp_file_name)
-        pr_dest = os.path.join(render_dir, dir_name, pr_dir)
-        self.manager.copy_template(pr_file, pr_dest, dir_name, 'prproj')
+        ae_template = AC_Template(temp_file_name, 'aep', ae_dir, project_path)
+        ae_template.copy_template(dir_name)
+
+        pr_template = AC_Template(template_file_name, 'prproj', pr_dir, project_path)
+        pr_template.copy_template(dir_name)
 
         sizzle_dir = 'Broll'
-        sizzle_template = '{}_sizzle_reel'.format(self.brand_var.get())
-        sizzle_path = os.path.join(template_path, sizzle_dir)
-        sizzle_file = os.path.join(sizzle_path, sizzle_template)
-        sizzle_dest = os.path.join(render_dir, dir_name, sizzle_dir)
-        self.manager.copy_template(sizzle_file, sizzle_dest, dir_name, 'txt', False)
+        sizzle_temp_name = '{}_sizzle_reel'.format(self.brand_var.get())
+        sizzle_template = AC_Template(sizzle_temp_name, 'txt', sizzle_dir, project_path)
+        sizzle_template.copy_template(dir_name, rename=False)        
 
         endcard_dir = 'Graphics'
-        endcard_template = '{}_endcard'.format(self.brand_var.get())
-        endcard_path  = os.path.join(template_path, endcard_dir)
-        endcard_file = os.path.join(endcard_path, endcard_template)
-        endcard_dest = os.path.join(render_dir, dir_name, endcard_dir)
-        self.manager.copy_template(endcard_file, endcard_dest, dir_name, 'txt', False)
+        endcard_temp_name = '{}_endcard'.format(self.brand_var.get())
+        endcard_template = AC_Template(endcard_temp_name, 'txt', endcard_dir, project_path)
+        endcard_template.copy_template(dir_name, rename=False)
 
         lower_dir = 'Images'
-        lower_template = '{}_lower_thirds'.format(self.brand_var.get())
-        lower_path = os.path.join(template_path, lower_dir)
-        lower_file = os.path. join(lower_path, lower_template)
-        lower_dest = os.path.join(render_dir, dir_name, lower_dir)
-        self.manager.copy_template(lower_file, lower_dest, dir_name, 'txt', False)
+        lower_temp_name = '{}_lower_thirds'.format(self.brand_var.get())
+        lower_template = AC_Template(lower_temp_name, 'txt', lower_dir, project_path)
+        lower_template.copy_template(dir_name, rename=False)
+
+        # lower_path = os.path.join(template_path, lower_dir)
+        # lower_file = os.path. join(lower_path, lower_template)
+        # lower_dest = os.path.join(render_dir, dir_name, lower_dir)
+        # self.manager.copy_template(lower_file, lower_dest, dir_name, 'txt', False)
 
         # Open the file location in Explorer for convenience and confirmation
         self.openpath("{0}\\{1}".format(media, parent_dir), dir_name)
