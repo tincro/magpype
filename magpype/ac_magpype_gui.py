@@ -2,9 +2,6 @@
 """
 This module is designed to build a floating window GUI's.
 It was designed as a solution for a project framework in a small studio.
-
-Developer: Austin Cronin
-Email: austin.cronin3d@gmail.com
 """
 
 import os
@@ -41,15 +38,15 @@ class AC_Magpype_GUI:
         self.font_size = 12
         self.font_family = 'Roboto'
         self.font_weight = 'bold'
-        self.blue = '#3498DB'
-        self.active_blue = '#6DB9EC'
-        self.white = '#FFFFFF'
-        self.grey = '#999999'
-        self.disable_grey = '#5C5C5C'
-        self.purple = '#A393B3'
-        self.active_purple = '#B8A7CA'
-        self.red = '#C0392B'
-        self.active_red = '#E55647'
+        self.main_btn_clr = '#3498DB'
+        self.main_active_clr = '#6DB9EC'
+        self.btn_font_clr = '#FFFFFF'
+        self.disable_btn_clr = '#999999'
+        self.btn_active_font_clr = '#5C5C5C'
+        self.open_btn_clr = '#A393B3'
+        self.open_active_clr = '#B8A7CA'
+        self.close_btn_clr = '#C0392B'
+        self.close_active_clr = '#E55647'
 
         # Build the UI information
         self.brand_label_text = "Brand Name:"
@@ -64,9 +61,9 @@ class AC_Magpype_GUI:
         self.brand_menu = OptionMenu(self.window, self.brand_var, *self.manager.options,
                                 command=self.on_brand_change)
         self.brand_menu.grid(row=0, column=1, pady=self.pady, sticky="w")
-        self.brand_menu.config(bg=self.blue, fg=self.white,
-                            activebackground=self.active_blue,
-                            activeforeground=self.disable_grey, width=self.option_w
+        self.brand_menu.config(bg=self.main_btn_clr, fg=self.btn_font_clr,
+                            activebackground=self.main_active_clr,
+                            activeforeground=self.btn_active_font_clr, width=self.option_w
         )
 
         # Brand name destination label with ISCI code
@@ -152,7 +149,7 @@ class AC_Magpype_GUI:
                             command=self.sel
         )
         self.print_btn.grid(row=6, column=1, sticky="w")
-        
+
         # Dynamically populate the Digital dropdown list
         self.digital_dir = AC_ProjectList(self.manager.digital_dir)
 
@@ -162,16 +159,16 @@ class AC_Magpype_GUI:
         self.digital_var = StringVar(self.window)
         self.digital_menu = OptionMenu(self.window, self.digital_var, *self.digital_dir.list)
         self.digital_menu.grid(row=5, column=1, columnspan=2, sticky="w", padx=self.padx*6)
-        self.digital_menu.config(width=35, background=self.grey,
-                                activebackground=self.active_blue,
-                                activeforeground=self.disable_grey)
+        self.digital_menu.config(width=35, background=self.disable_btn_clr,
+                                activebackground=self.main_active_clr,
+                                activeforeground=self.btn_active_font_clr)
 
         self.print_var = StringVar(self.window)
         self.print_menu = OptionMenu(self.window, self.print_var, *self.print_dir.list)
         self.print_menu.grid(row=6, column=1, columnspan=2, sticky="w", padx=self.padx*6)
-        self.print_menu.config(width=35, background=self.grey,
-                            activebackground=self.active_blue,
-                            activeforeground=self.disable_grey)
+        self.print_menu.config(width=35, background=self.disable_btn_clr,
+                            activebackground=self.main_active_clr,
+                            activeforeground=self.btn_active_font_clr)
 
         # Set default button pressed for media_var and disable the drop downs
         self.broadcast_btn.select()
@@ -187,27 +184,25 @@ class AC_Magpype_GUI:
         self.open_btn = Button(self.window, text=self.open_btn_text,
                                 command=lambda: self.openpath(self.media_var.get(),
                                 self.get_media_path(self.media_var.get())))
-        self.open_btn.config(bg=self.purple, fg=self.white, width=16,
-                                activebackground=self.active_purple,
-                                activeforeground=self.disable_grey)
+        self.open_btn.config(bg=self.open_btn_clr, fg=self.btn_font_clr, width=16,
+                                activebackground=self.open_active_clr,
+                                activeforeground=self.btn_active_font_clr)
         self.open_btn.grid(row=8, column=0, padx=self.padx, sticky="e")
 
 
         self.create_btn_text = "Create Project"
         self.create_btn = Button(self.window, text=self.create_btn_text, command=self.create_dir)
-        self.create_btn.config(bg=self.blue, fg=self.white, width=self.btn_padx,
-                                activebackground=self.active_blue,
-                                activeforeground=self.disable_grey)
+        self.create_btn.config(bg=self.main_btn_clr, fg=self.btn_font_clr, width=self.btn_padx,
+                                activebackground=self.main_active_clr,
+                                activeforeground=self.btn_active_font_clr)
         self.create_btn.grid(row=8, column=1, sticky="w")
 
 
         self.close_btn = Button(self.window, text="Close", command=self.close_win)
-        self.close_btn.config(bg=self.red, fg=self.white, width=self.btn_padx,
-                            activebackground=self.active_red,
-                            activeforeground=self.disable_grey)
+        self.close_btn.config(bg=self.close_btn_clr, fg=self.btn_font_clr, width=self.btn_padx,
+                            activebackground=self.close_active_clr,
+                            activeforeground=self.btn_active_font_clr)
         self.close_btn.grid(row=8, column=2, padx=self.padx, sticky="e")
-
-
 
     def close_win(self):
         """Callback to destroy the window."""
@@ -251,39 +246,30 @@ class AC_Magpype_GUI:
 
         self.manager.make_folders(render_dir, dir_name, folder_list)
 
-        template_path = self.manager.template_dir
         temp_file_name = 'Code_CampaignNumber_CampaignName_Version_001'
 
-        ae_path = os.path.join(template_path, ae_dir)
-        ae_file = os.path.join(ae_path, temp_file_name)
-        ae_dest = os.path.join(render_dir, dir_name, ae_dir)
-        self.manager.copy_template(ae_file, ae_dest, dir_name, 'aep')
+        project_path = os.path.join(render_dir, dir_name)
 
-        pr_path = os.path.join(template_path, pr_dir)
-        pr_file = os.path.join(pr_path, temp_file_name)
-        pr_dest = os.path.join(render_dir, dir_name, pr_dir)
-        self.manager.copy_template(pr_file, pr_dest, dir_name, 'prproj')
+        ae_template = AC_Template(temp_file_name, 'aep', ae_dir, project_path)
+        ae_template.copy_template(dir_name)
+
+        pr_template = AC_Template(temp_file_name, 'prproj', pr_dir, project_path)
+        pr_template.copy_template(dir_name)
 
         sizzle_dir = 'Broll'
-        sizzle_template = '{}_sizzle_reel'.format(self.brand_var.get())
-        sizzle_path = os.path.join(template_path, sizzle_dir)
-        sizzle_file = os.path.join(sizzle_path, sizzle_template)
-        sizzle_dest = os.path.join(render_dir, dir_name, sizzle_dir)
-        self.manager.copy_template(sizzle_file, sizzle_dest, dir_name, 'txt', False)
+        sizzle_temp_name = '{}_sizzle_reel'.format(self.brand_var.get())
+        sizzle_template = AC_Template(sizzle_temp_name, 'txt', sizzle_dir, project_path)
+        sizzle_template.copy_template(dir_name, rename=False)
 
         endcard_dir = 'Graphics'
-        endcard_template = '{}_endcard'.format(self.brand_var.get())
-        endcard_path  = os.path.join(template_path, endcard_dir)
-        endcard_file = os.path.join(endcard_path, endcard_template)
-        endcard_dest = os.path.join(render_dir, dir_name, endcard_dir)
-        self.manager.copy_template(endcard_file, endcard_dest, dir_name, 'txt', False)
+        endcard_temp_name = '{}_endcard'.format(self.brand_var.get())
+        endcard_template = AC_Template(endcard_temp_name, 'txt', endcard_dir, project_path)
+        endcard_template.copy_template(dir_name, rename=False)
 
         lower_dir = 'Images'
-        lower_template = '{}_lower_thirds'.format(self.brand_var.get())
-        lower_path = os.path.join(template_path, lower_dir)
-        lower_file = os.path. join(lower_path, lower_template)
-        lower_dest = os.path.join(render_dir, dir_name, lower_dir)
-        self.manager.copy_template(lower_file, lower_dest, dir_name, 'txt', False)
+        lower_temp_name = '{}_lower_thirds'.format(self.brand_var.get())
+        lower_template = AC_Template(lower_temp_name, 'txt', lower_dir, project_path)
+        lower_template.copy_template(dir_name, rename=False)
 
         # Open the file location in Explorer for convenience and confirmation
         self.openpath("{0}\\{1}".format(media, parent_dir), dir_name)
@@ -315,14 +301,14 @@ class AC_Magpype_GUI:
     def sel(self):
         """Callback to select which medium this project is for."""
         if(self.media_var.get() == self.media_btns[1]):
-            self.digital_menu.config(state = ACTIVE, bg=self.blue, fg=self.white)
+            self.digital_menu.config(state = ACTIVE, bg=self.main_btn_clr, fg=self.btn_font_clr)
         else:
-            self.digital_menu.config(state = DISABLED, bg=self.grey)
+            self.digital_menu.config(state = DISABLED, bg=self.disable_btn_clr)
 
         if(self.media_var.get() == self.media_btns[2]):
-            self.print_menu.config(state = ACTIVE, bg=self.blue, fg=self.white)
+            self.print_menu.config(state = ACTIVE, bg=self.main_btn_clr, fg=self.btn_font_clr)
         else:
-            self.print_menu.config(state = DISABLED, bg=self.grey)
+            self.print_menu.config(state = DISABLED, bg=self.disable_btn_clr)
 
 
 if __name__ == "__main__":
