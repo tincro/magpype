@@ -277,7 +277,7 @@ class AC_Magpype_GUI:
         lower_template = AC_Template(lower_temp_name, 'txt', lower_dir, project_path)
         lower_template.set_template_drive(template_dir)
         lower_template.copy_template(dir_name, rename=False)
-
+        
         # Open the file location in Explorer for convenience and confirmation
         self.openpath("{0}\\{1}".format(media, parent_dir), dir_name)
 
