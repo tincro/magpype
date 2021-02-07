@@ -119,11 +119,12 @@ class AC_Template:
         file_long_name = os.path.join(file_path, file_short_name)
         file_destination = os.path.join(self.destination, self.parent_dir)
 
-        file_copy = copy2(file_long_name, file_destination)
+        if os.path.exists(file_long_name):
+            file_copy = copy2(file_long_name, file_destination)
 
-        if rename:
-            file_rename = "{0}.{1}".format(os.path.join(file_destination, new_file_name), self.extension)
-            self.rename_template(file_copy, file_rename)
+            if rename:
+                file_rename = "{0}.{1}".format(os.path.join(file_destination, new_file_name), self.extension)
+                self.rename_template(file_copy, file_rename)
 
     def rename_template(self, file, destination):
         """Rename template to new project name convention"""
