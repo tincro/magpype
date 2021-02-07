@@ -246,31 +246,38 @@ class AC_Magpype_GUI:
 
         self.manager.make_folders(render_dir, dir_name, folder_list)
 
+        template_drive = "S:"
+        template_dir = os.path.join(template_drive, "Templates")
         temp_file_name = 'Code_CampaignNumber_CampaignName_Version_001'
 
         project_path = os.path.join(render_dir, dir_name)
 
         ae_template = AC_Template(temp_file_name, 'aep', ae_dir, project_path)
+        ae_template.set_template_drive(template_dir)
         ae_template.copy_template(dir_name)
 
         pr_template = AC_Template(temp_file_name, 'prproj', pr_dir, project_path)
+        pr_template.set_template_drive(template_dir)
         pr_template.copy_template(dir_name)
 
         sizzle_dir = 'Broll'
         sizzle_temp_name = '{}_sizzle_reel'.format(self.brand_var.get())
         sizzle_template = AC_Template(sizzle_temp_name, 'txt', sizzle_dir, project_path)
+        sizzle_template.set_template_drive(template_dir)
         sizzle_template.copy_template(dir_name, rename=False)
 
         endcard_dir = 'Graphics'
         endcard_temp_name = '{}_endcard'.format(self.brand_var.get())
         endcard_template = AC_Template(endcard_temp_name, 'txt', endcard_dir, project_path)
+        endcard_template.set_template_drive(template_dir)
         endcard_template.copy_template(dir_name, rename=False)
 
         lower_dir = 'Images'
         lower_temp_name = '{}_lower_thirds'.format(self.brand_var.get())
         lower_template = AC_Template(lower_temp_name, 'txt', lower_dir, project_path)
+        lower_template.set_template_drive(template_dir)
         lower_template.copy_template(dir_name, rename=False)
-
+        
         # Open the file location in Explorer for convenience and confirmation
         self.openpath("{0}\\{1}".format(media, parent_dir), dir_name)
 
@@ -312,7 +319,47 @@ class AC_Magpype_GUI:
 
 
 if __name__ == "__main__":
+    options = [
+    "Ford",
+    "Chevy",
+    "Hyundai",
+    "Kia",
+    "Mitsubishi",
+    "Buick_GMC",
+    "Mazda",
+    "New Whiteland",
+    "Genesis",
+    "Westside Auto Mall",
+    "Ray_Buy Here Pay Here",
+    "Ray_Skillman_All_Brands",
+    "Tent_Sale"
+    ]
+
+    id_codes = {
+        "Ford": ["RS2F", "RSHF", "RSF", "RSFU"],
+        "Chevy": ["RSC"],
+        "Hyundai": ["RS3H", "RSH", "RSWH", "RSHA"],
+        "Kia": ["RS3K", "RSK", "RSWK", "RSSK"],
+        "Mitsubishi": ["RS3M", "RSM", "RSWMI"],
+        "Buick_GMC": ["RS2BG", "RSNEBG","RS2G","RS2B"],
+        "Mazda": ["RS2MA", "RSWMA", "RSNEMA"],
+        "New Whiteland": ["RSFNW", "RSKNW", "RSBNW", "RSMNW"],
+        "Genesis": ["RSG"],
+        "Westside Auto Mall": ["RSWAM", "RSWT"],
+        "Ray_Buy Here Pay Here": ["RSBHPH"],
+        "Ray_Skillman_All_Brands": ["RSAB", "RSBF"],
+        "Tent_Sale": ["TS"]
+    }
+
+    project_drive = "R:"
+    broadcast_dir = os.path.join(project_drive,"Broadcast")
+    digital_dir = os.path.join(project_drive, "Digital")
+    print_dir = os.path.join(project_drive, "Print")
+
     window = Tk()
-    manager = AC_PathManager()
+    manager = AC_PathManager(project_drive, options, id_codes)
+    manager.set_broadcast_dir(broadcast_dir)
+    manager.set_digital_dir(digital_dir)
+    manager.set_print_dir(print_dir)
     gui = AC_Magpype_GUI(window, manager)
     window.mainloop()

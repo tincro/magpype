@@ -8,46 +8,6 @@ import os
 from shutil import copy2
 from datetime import date
 
-OPTIONS = [
-"Ford",
-"Chevy",
-"Hyundai",
-"Kia",
-"Mitsubishi",
-"Buick_GMC",
-"Mazda",
-"New Whiteland",
-"Genesis",
-"Westside Auto Mall",
-"Ray_Buy Here Pay Here",
-"Ray_Skillman_All_Brands",
-"Tent_Sale"
-]
-
-BRANDS = {
-    "Ford": ["RS2F", "RSHF", "RSF", "RSFU"],
-    "Chevy": ["RSC"],
-    "Hyundai": ["RS3H", "RSH", "RSWH", "RSHA"],
-    "Kia": ["RS3K", "RSK", "RSWK", "RSSK"],
-    "Mitsubishi": ["RS3M", "RSM", "RSWMI"],
-    "Buick_GMC": ["RS2BG", "RSNEBG","RS2G","RS2B"],
-    "Mazda": ["RS2MA", "RSWMA", "RSNEMA"],
-    "New Whiteland": ["RSFNW", "RSKNW", "RSBNW", "RSMNW"],
-    "Genesis": ["RSG"],
-    "Westside Auto Mall": ["RSWAM", "RSWT"],
-    "Ray_Buy Here Pay Here": ["RSBHPH"],
-    "Ray_Skillman_All_Brands": ["RSAB", "RSBF"],
-    "Tent_Sale": ["TS"]
-}
-
-PROJECT_DRIVE = "R:"
-BROADCAST_DIR = os.path.join(PROJECT_DRIVE,"Broadcast")
-DIGITAL_DIR = os.path.join(PROJECT_DRIVE, "Digital")
-PRINT_DIR = os.path.join(PROJECT_DRIVE, "Print")
-
-TEMPLATE_DRIVE = "S:"
-TEMPLATE_DIR = os.path.join(TEMPLATE_DRIVE, "Templates")
-
 class AC_DateManager:
     """Management class to hold constant information."""
 
@@ -93,16 +53,14 @@ class AC_ProjectList:
 
 class AC_PathManager:
     """Management class for path building."""
-    def __init__(self, project_drive=PROJECT_DRIVE, broadcast_dir=BROADCAST_DIR,
-                digital_dir=DIGITAL_DIR, print_dir=PRINT_DIR,
-                options=OPTIONS, id_code_dict=BRANDS):
+    def __init__(self, project_drive, options, id_code_dict):
         self.project_drive = project_drive
-        self.broadcast_dir = broadcast_dir
-        self.digital_dir = digital_dir
-        self.print_dir = print_dir
-
         self.options = options
         self.id_code = id_code_dict
+
+        self.broadcast_dir = None
+        self.digital_dir = None
+        self.print_dir = None
 
         self.default_drive = self.project_drive
         self.default_dir = self.broadcast_dir
@@ -110,6 +68,18 @@ class AC_PathManager:
     def brandname(self, brand_name):
         """Find which brand in the dictionary and return the proper label."""
         return self.id_code[brand_name]
+
+    def set_broadcast_dir(self, broadcast_dir):
+        """Set the broadcast directory location on the drive."""
+        self.broadcast_dir = broadcast_dir
+
+    def set_digital_dir(self, digital_dir):
+        """Set the digital directory location on the drive."""
+        self.digital_dir = digital_dir
+
+    def set_print_dir(self, print_dir):
+        """Set the print directory location on the drive."""
+        self.print_dir = print_dir
 
     def make_folders(self, render_directory, directory_name, folders):
         """Make folders for the directory given the list of folders build."""
@@ -136,8 +106,11 @@ class AC_Template:
         self.extension = extension
         self.parent_dir = parent_dir
         self.destination = destination
+        self.template_drive = None
 
-        self.template_drive = TEMPLATE_DIR
+    def set_template_drive(self, template_drive):
+        """Set template drive. Use before copying any templates as it will break otherwise."""
+        self.template_drive = template_drive
 
     def copy_template(self, new_file_name, rename=True):
         """Copy the template file into the new directory with correct naming."""
@@ -146,11 +119,12 @@ class AC_Template:
         file_long_name = os.path.join(file_path, file_short_name)
         file_destination = os.path.join(self.destination, self.parent_dir)
 
-        file_copy = copy2(file_long_name, file_destination)
+        if os.path.exists(file_long_name):
+            file_copy = copy2(file_long_name, file_destination)
 
-        if rename:
-            file_rename = "{0}.{1}".format(os.path.join(file_destination, new_file_name), self.extension)
-            self.rename_template(file_copy, file_rename)
+            if rename:
+                file_rename = "{0}.{1}".format(os.path.join(file_destination, new_file_name), self.extension)
+                self.rename_template(file_copy, file_rename)
 
     def rename_template(self, file, destination):
         """Rename template to new project name convention"""
