@@ -8,7 +8,7 @@ import os
 from shutil import copy2
 from datetime import date
 
-class AC_DateManager:
+class DateManager:
     """Management class to hold constant information."""
 
     def __init__(self):
@@ -35,7 +35,7 @@ class AC_DateManager:
         month_num = int(month)
         return self.month_name[month_num]
 
-class AC_ProjectList:
+class ProjectList:
     """List of projects in a directory."""
     def __init__(self, dir_name):
         self.dir_name = dir_name
@@ -51,7 +51,7 @@ class AC_ProjectList:
             destination.append(item)
         return destination
 
-class AC_PathManager:
+class PathManager:
     """Management class for path building."""
     def __init__(self, project_drive, options, id_code_dict):
         self.project_drive = project_drive
@@ -99,7 +99,7 @@ class AC_PathManager:
             processed = label_name
         return processed
 
-class AC_Template:
+class Template:
     """Magement class to control templates."""
     def __init__(self, template_name, extension, parent_dir, destination):
         self.template_name = template_name

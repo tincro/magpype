@@ -9,15 +9,15 @@ import subprocess
 from tkinter import *
 from tkinter import ttk
 
-from ac_manager import *
+import magpype.manager as manager
 
-class AC_Magpype_GUI:
+class Magpype_GUI:
     """Class for creating floating desktop window. Framework for organization of
     production. Managed by AC_Manager."""
 
     def __init__(self, window, manager):
         self.manager = manager
-        self.date = AC_DateManager()
+        self.date = manager.DateManager()
 
         # Window construction information
         self.window = window
@@ -151,10 +151,10 @@ class AC_Magpype_GUI:
         self.print_btn.grid(row=6, column=1, sticky="w")
 
         # Dynamically populate the Digital dropdown list
-        self.digital_dir = AC_ProjectList(self.manager.digital_dir)
+        self.digital_dir = manager.ProjectList(self.manager.digital_dir)
 
         # Dynamically populate the Print dropdown list
-        self.print_dir = AC_ProjectList(self.manager.print_dir)
+        self.print_dir = manager.ProjectList(self.manager.print_dir)
 
         self.digital_var = StringVar(self.window)
         self.digital_menu = OptionMenu(self.window, self.digital_var, *self.digital_dir.list)
@@ -252,29 +252,29 @@ class AC_Magpype_GUI:
 
         project_path = os.path.join(render_dir, dir_name)
 
-        ae_template = AC_Template(temp_file_name, 'aep', ae_dir, project_path)
+        ae_template = manager.Template(temp_file_name, 'aep', ae_dir, project_path)
         ae_template.set_template_drive(template_dir)
         ae_template.copy_template(dir_name)
 
-        pr_template = AC_Template(temp_file_name, 'prproj', pr_dir, project_path)
+        pr_template = manager.Template(temp_file_name, 'prproj', pr_dir, project_path)
         pr_template.set_template_drive(template_dir)
         pr_template.copy_template(dir_name)
 
         sizzle_dir = 'Broll'
         sizzle_temp_name = '{}_sizzle_reel'.format(self.brand_var.get())
-        sizzle_template = AC_Template(sizzle_temp_name, 'txt', sizzle_dir, project_path)
+        sizzle_template = manager.Template(sizzle_temp_name, 'txt', sizzle_dir, project_path)
         sizzle_template.set_template_drive(template_dir)
         sizzle_template.copy_template(dir_name, rename=False)
 
         endcard_dir = 'Graphics'
         endcard_temp_name = '{}_endcard'.format(self.brand_var.get())
-        endcard_template = AC_Template(endcard_temp_name, 'txt', endcard_dir, project_path)
+        endcard_template = manager.Template(endcard_temp_name, 'txt', endcard_dir, project_path)
         endcard_template.set_template_drive(template_dir)
         endcard_template.copy_template(dir_name, rename=False)
 
         lower_dir = 'Images'
         lower_temp_name = '{}_lower_thirds'.format(self.brand_var.get())
-        lower_template = AC_Template(lower_temp_name, 'txt', lower_dir, project_path)
+        lower_template = manager.Template(lower_temp_name, 'txt', lower_dir, project_path)
         lower_template.set_template_drive(template_dir)
         lower_template.copy_template(dir_name, rename=False)
         
@@ -357,9 +357,9 @@ if __name__ == "__main__":
     print_dir = os.path.join(project_drive, "Print")
 
     window = Tk()
-    manager = AC_PathManager(project_drive, options, id_codes)
+    manager = manager.PathManager(project_drive, options, id_codes)
     manager.set_broadcast_dir(broadcast_dir)
     manager.set_digital_dir(digital_dir)
     manager.set_print_dir(print_dir)
-    gui = AC_Magpype_GUI(window, manager)
+    gui = Magpype_GUI(window, manager)
     window.mainloop()

@@ -4,8 +4,10 @@ Main function to construct and build the projects
 """
 import os
 
-import  ac_manager
-import ac_magpype_gui
+from tkinter import Tk
+
+import  magpype.manager as mpmanager
+import magpype.magpype_gui as mpgui
 
 def main():
     """Set up drives and for project"""
@@ -47,9 +49,9 @@ def main():
     print_dir = os.path.join(project_drive, "Print")
 
     window = Tk()
-    manager = AC_PathManager(project_drive, options, id_codes)
+    manager = mpmanager.PathManager(project_drive, options, id_codes)
     manager.set_broadcast_dir(broadcast_dir)
     manager.set_digital_dir(digital_dir)
     manager.set_print_dir(print_dir)
-    gui = AC_Magpype_GUI(window, manager)
+    gui = mpgui.Magpype_GUI(window, manager)
     window.mainloop()
